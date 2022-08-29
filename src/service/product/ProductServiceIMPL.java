@@ -23,6 +23,7 @@ public class ProductServiceIMPL implements IProductService {
     @Override
     public void save(Product product) {
         productList.add(product);
+        new Config<Product>().writeFile(PATH_PRODUCT,productList);
     }
 
     @Override
@@ -55,7 +56,17 @@ public class ProductServiceIMPL implements IProductService {
             }
         });
     }
-
+    public void editById(Product product) {
+        for (int i = 0; i < productList.size(); i++) {
+            if (product.getId() == productList.get(i).getId()) {
+                productList.get(i).setName(product.getName());
+                productList.get(i).setPrice(product.getPrice());
+                productList.get(i).setDescription(product.getDescription());
+                productList.get(i).setProductCategory(product.getProductCategory());
+            }
+        }
+        new Config<Product>().writeFile(PATH_PRODUCT,productList);
+    }
 
     public void deleteById(int id){
         for (int i = 0; i < productList.size(); i++) {
@@ -63,6 +74,6 @@ public class ProductServiceIMPL implements IProductService {
                 productList.remove(i);
             }
         }
+        new Config<Product>().writeFile(PATH_PRODUCT,productList);
     }
-
 }

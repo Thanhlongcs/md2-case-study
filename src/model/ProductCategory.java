@@ -6,7 +6,8 @@ public class ProductCategory implements Serializable {
     private int id;
     private String name;
 
-    public ProductCategory() {
+    public ProductCategory(String newProductCategory) {
+        this.name = newProductCategory;
     }
 
     public ProductCategory(int id, String name) {
@@ -32,9 +33,6 @@ public class ProductCategory implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductCategory{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "ProductCategory: " + name;
     }
 }

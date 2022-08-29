@@ -5,6 +5,7 @@ import controller.UserController;
 import dto.request.SignInDTO;
 import dto.request.SignUpDTO;
 import dto.response.ResponseMessenger;
+import model.RoleName;
 import model.User;
 
 import java.util.ArrayList;
@@ -18,24 +19,23 @@ public class ViewMainMenu {
 
     List<User> userList = userController.getUserList();
 
+
     public void menu() {
         System.out.println("*****MENU*****");
-        System.out.println("1. Show user list");
-        System.out.println("2. Register");
-        System.out.println("3 .Login");
+        System.out.println("1. Register");
+        System.out.println("2. Login");
+
 
         int choice = Integer.parseInt(Config.scanner().nextLine());
 
         switch (choice) {
             case 1:
-                formShowListUser();
-                break;
-            case 2:
                 formRegister();
                 break;
-            case 3:
+            case 2:
                 formLogin();
                 break;
+
             default:
                 System.out.println("Invalid choice");
         }
@@ -69,11 +69,11 @@ public class ViewMainMenu {
         ResponseMessenger responseMessenger = userController.login(signInDTO);
 
         switch (responseMessenger.getMessenger()) {
-            case "login_success":
+            case "login success":
                 System.out.println("Login successful!");
                 new ViewHome();
                 break;
-            case "login_failure":
+            case "login failure":
                 System.out.println("Username or password is incorrect!");
                 break;
         }
@@ -94,7 +94,7 @@ public class ViewMainMenu {
         while (true) {
             System.out.println("Enter name:");
             name = Config.scanner().nextLine();
-            if (name.matches("[A-Z][a-zA-Z ]{1,10}")) {
+            if (name.matches("[A-Z][a-zA-Z0-9]{1,10}")) {
                 break;
             } else {
                 System.out.println("Invalid name, try again!");
@@ -143,13 +143,13 @@ public class ViewMainMenu {
         ResponseMessenger responseMessenger = userController.register(signUpDTO);
 
         switch (responseMessenger.getMessenger()) {
-            case "user_existed":
+            case "user existed":
                 System.out.println("Username already exists");
                 break;
-            case "email_existed":
+            case "email existed":
                 System.out.println("Email already exists");
                 break;
-            case "invalid_role":
+            case "invalid role":
                 System.out.println("Invalid role, try again!");
                 break;
             case "success":
@@ -157,13 +157,5 @@ public class ViewMainMenu {
         }
     }
 
-    private void formShowListUser() {
-        System.out.println("===ID===NAME========USERNAME========EMAIL========ROLE======");
-        for (int i = 0; i < userList.size(); i++) {
-            System.out.println("===" + userList.get(i).getId() + "===" + userList.get(i).getName() + "========"
-                    + userList.get(i).getUsername() + "=======" + userList.get(i).getEmail() + "======="
-                    + userList.get(i).getRoles() + "=======");
 
-        }
-    }
 }

@@ -12,4 +12,6 @@ public interface IProductService extends IGenericService<Product> {
 
     void sortByPrice();
 
+    void editById(Product product);
 }
+

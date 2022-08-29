@@ -34,7 +34,7 @@ public class ViewProductCategory {
             System.out.println("enter random for continue and enter quit for out");
             String backMenu = Config.scanner().nextLine();
             if(backMenu.equalsIgnoreCase("quit")){
-                new ViewProductCategory();
+                new ViewHome();
             }
 
         }
@@ -100,7 +100,7 @@ public class ViewProductCategory {
             System.out.println("Enter random key to continue edit  and Enter quit for out: ");
             String backMenu = Config.scanner().nextLine();
             if (backMenu.equalsIgnoreCase("quit")) {
-                new Main();
+                new ViewHome();
             }
         }
     }

@@ -10,10 +10,6 @@ public class Product implements Serializable {
     private String description;
     private ProductCategory productCategory;
 
-    public Product(String newNameProduct, String newPrice, String newDes, String newProductCategory) {
-        name = newNameProduct;
-        this.price = Double.parseDouble(newPrice);
-    }
 
     public Product(int id, String name, double price, String description,ProductCategory productCategory) {
         this.id = id;
@@ -63,13 +59,12 @@ public class Product implements Serializable {
     }
     @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", description='" + description + '\'' +
-                ", productCategory= " +productCategory +"\n"+
-                '}';
+        return
+                "======" + id +
+                "====== " + name + '\'' +
+                "======" + price +
+                "======" + description + '\'' +
+                "====== " +productCategory +"\n";
     }
 
 

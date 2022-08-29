@@ -18,7 +18,7 @@ public class ProductCategoryServiceIMPL implements IProductCategoryService {
 
     @Override
     public List<ProductCategory> findAll() {
-        new Config<ProductCategory>().writeFile(PATH_CATEGORY,productCategoryList);
+        new Config<ProductCategory>().writeFile(PATH_CATEGORY, productCategoryList);
         return productCategoryList;
     }
 
@@ -32,34 +32,34 @@ public class ProductCategoryServiceIMPL implements IProductCategoryService {
     public void deleteById(int id) {
         for (int i = 0; i < productCategoryList.size(); i++) {
             if (id == productCategoryList.get(i).getId()) {
-                productCategoryList.remove(productCategoryList.get(i)) ;
-
+                productCategoryList.remove(productCategoryList.get(i));
             }
-
         }
     }
+
     @Override
     public ProductCategory findById(int id) {
         for (int i = 0; i < productCategoryList.size(); i++) {
-            if(id==productCategoryList.get(i).getId()){
+            if (id == productCategoryList.get(i).getId()) {
                 return productCategoryList.get(i);
             }
         }
         return null;
     }
-    public List<Product> findByNameCategory(String name) {
-    List<Product> productList=new ArrayList<>();
-        for (int i = 0; i < new ProductServiceIMPL().findAll().size(); i++) {
-        if (name.equals(new ProductServiceIMPL().findAll().get(i).getProductCategory().getName())){
 
-            productList.add(new ProductServiceIMPL().findAll().get(i));
+    public List<Product> findByNameCategory(String name) {
+        List<Product> productList = new ArrayList<>();
+        for (int i = 0; i < new ProductServiceIMPL().findAll().size(); i++) {
+            if (name.equals(new ProductServiceIMPL().findAll().get(i).getProductCategory().getName())) {
+                productList.add(new ProductServiceIMPL().findAll().get(i));
+            }
         }
-    }
         return productList;
-}
+    }
+
     public void editById(ProductCategory productCategory) {
         for (int i = 0; i < productCategoryList.size(); i++) {
-            if (productCategory.getId()==productCategoryList.get(i).getId()){
+            if (productCategory.getId() == productCategoryList.get(i).getId()) {
                 productCategoryList.get(i).setName(productCategory.getName());
             }
         }

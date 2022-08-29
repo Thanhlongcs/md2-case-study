@@ -14,6 +14,23 @@ public class Config<T> {
         Scanner scanner = new Scanner(System.in);
         return scanner;
     }
+    public static int getValidInteger() {
+        int integer;
+        while (true) {
+            System.out.println("Enter choice / 0 to back");
+            String s = Config.scanner().nextLine();
+
+            if (Integer.parseInt(s) == 0) return 0;
+
+            if (s.matches("\\d+")) {
+                integer = Integer.parseInt(s);
+                break;
+            } else {
+                System.out.println("Invalid number, try again!");
+            }
+        }
+        return integer;
+    }
 
     public List<T> readFile(String pathFile) {
         List<T> tList = new ArrayList<>();

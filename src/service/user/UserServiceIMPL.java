@@ -1,17 +1,20 @@
 package service.user;
 
 import config.Config;
+import model.Role;
 import model.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserServiceIMPL implements IUserService {
 
     static String PATH_USER = "C:\\Users\\THINKPAD\\Downloads\\MD2-case-study\\src\\database\\user.txt";
     static String PATH_USER_LOGIN = "C:\\Users\\THINKPAD\\Downloads\\MD2-case-study\\src\\database\\user_login.txt";
 
-    static List<User> userList = new Config<User>().readFile(PATH_USER);
+    public static List<User> userList = new Config<User>().readFile(PATH_USER);
 
     static {
         if (userList == null) {
@@ -29,7 +32,7 @@ public class UserServiceIMPL implements IUserService {
     @Override
     public void save(User user) {
         userList.add(user);
-
+        new Config<User>().writeFile(PATH_USER, userList);
     }
 
     @Override
@@ -75,7 +78,10 @@ public class UserServiceIMPL implements IUserService {
 
     @Override
     public boolean checkLogin(String username, String password) {
+        System.out.println(username);
+        System.out.println(password);
         for (User user : userList) {
+            System.out.println(user);
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 return true;
             }
@@ -85,20 +91,22 @@ public class UserServiceIMPL implements IUserService {
 
     @Override
     public User getCurrentUser() {
-        User user;
-        if (new Config<User>().readFile(PATH_USER_LOGIN) != null) {
-            if(new Config<User>().readFile(PATH_USER_LOGIN).size() != 0){
-                user = new Config<User>().readFile(PATH_USER_LOGIN).get(0);
-                return user;
-            }
-        }
-        return null;
+//        User user;
+//        if (new Config<User>().readFile(PATH_USER_LOGIN) != null) {
+//            if(new Config<User>().readFile(PATH_USER_LOGIN).size() != 0){
+//                user = new Config<User>().readFile(PATH_USER_LOGIN).get(0);
+//                return user;
+//            }
+//        }
+//        return null;
+//    }
+        User user = new  Config < User > ().readFile(PATH_USER_LOGIN).get(0);
+        if (user==null) return null;
+        return  findByUsername(user.getUsername());
     }
-
     @Override
     public void saveCurrentUser(User user) {
         new Config<User>().writeFile(PATH_USER_LOGIN, userList);
-        userList.add(user);
     }
 
     @Override
@@ -110,5 +118,36 @@ public class UserServiceIMPL implements IUserService {
             }
         }
         return null;
+    }
+
+    @Override
+    public void remove(int id) {
+        userList.remove(findById(id));
+        new Config<User>().writeFile(PATH_USER, userList);
+    }
+
+    @Override
+    public void changeRole(int id, Role role) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        findById(id).setRoles(roles);
+        updateData();
+    }
+
+    @Override
+    public void changeStatus(int id) {
+        User user = findById(id);
+        user.setStatus(!user.isStatus());
+        updateData();
+    }
+
+    @Override
+    public void updateData() {
+        new Config<User>().writeFile(PATH_USER, userList);
+    }
+
+    @Override
+    public int getLastId() {
+        return userList.get(userList.size() - 1).getId() + 1;
     }
 }

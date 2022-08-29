@@ -22,10 +22,8 @@ public class ProductController {
         return productService.findById(id);
     }
 
-    public void updateProduct(int id, Product newProduct) {
-        Product product = productService.findById(id);
-        product.setName(newProduct.getName());
-        product.setPrice(newProduct.getPrice());
+    public void updateProduct(int idProduct, Product product) {
+        productService.editById(product);
     }
 
     public void deleteProduct(int id) {

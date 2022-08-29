@@ -18,4 +18,8 @@ public class ResponseMessenger {
     public void setMessenger(String messenger) {
         this.messenger = messenger;
     }
+
+    public String getMessage() {
+        return messenger;
+    }
 }
