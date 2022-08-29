@@ -142,6 +142,17 @@ public class UserServiceIMPL implements IUserService {
     }
 
     @Override
+    public void changeProfile(User user) {
+       User user1 = findByUsername(user.getUsername());
+       user1.setName(user.getName());
+       user1.setUsername(user.getUsername());
+       user1.setEmail(user.getEmail());
+       user1.setPassword(user.getPassword());
+        new Config<User>().writeFile(PATH_USER, userList);
+    }
+
+
+    @Override
     public void updateData() {
         new Config<User>().writeFile(PATH_USER, userList);
     }

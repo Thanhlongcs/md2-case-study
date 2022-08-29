@@ -18,6 +18,11 @@ import java.util.Set;
 
 public class UserController {
 
+
+
+    public boolean existByEmail(String email){
+        return userService.existsByEmail(email);
+    };
     IUserService userService = new UserServiceIMPL();
 
     IRoleService roleService = new RoleServiceIMPL();
@@ -111,8 +116,14 @@ public class UserController {
     }
 
     public ResponseMessenger blockUser(int id) {
+        User blockUser = userService.findById(id);
         if (userService.findById(id) == null || id == 0) {
             return new ResponseMessenger("not found");
+        }
+        Role role = new ArrayList<>(getCurrentUser().getRoles()).get(0);
+        Role roleBlock = new ArrayList<>(blockUser.getRoles()).get(0);
+        if (role.getRoleName() == RoleName.PM && (roleBlock.getRoleName() == RoleName.PM || roleBlock.getRoleName() == RoleName.ADMIN)) {
+            return new ResponseMessenger("jurisdiction");
         }
         userService.changeStatus(id);
         boolean check = userService.findById(id).isStatus();
@@ -130,6 +141,12 @@ public class UserController {
         currentUser.setPassword(newPassword);
         userService.updateData();
         return new ResponseMessenger("success");
+    }
+    public void changeStatus(int id){
+        userService.changeStatus(id);
+    }
+    public void updateProfile(User user){
+        userService.changeProfile(user);
     }
 
     }

@@ -215,13 +215,14 @@ public class ViewHome {
 
 
 
-    private void formUserManage() {
+    public void formUserManage() {
         System.out.println("Menu");
         System.out.println("1. Show list user");
         System.out.println("2. Delete user");
         System.out.println("3. Change role");
         System.out.println("4. Block user");
-        System.out.println("5. Back");
+        System.out.println("5. Change profile");
+        System.out.println("6. Back");
 
         int choice = Integer.parseInt(Config.scanner().nextLine());
         if (choice == 0) return;
@@ -239,7 +240,10 @@ public class ViewHome {
                 formBlockUser();
                 break;
             case 5:
+               new ViewChangeProfile().menuProfile();
                 return;
+            case 6:
+                new ViewHome();
             default:
                 System.out.println("Invalid choice");
         }
@@ -247,11 +251,11 @@ public class ViewHome {
         formUserManage();
     }
     private void formShowListUser() {
-        System.out.println("===ID===NAME========USERNAME========EMAIL========ROLE======");
+        System.out.println("===ID===NAME========USERNAME========EMAIL========ROLE======STATUS=======");
         for (int i = 0; i < userList.size(); i++) {
             System.out.println("===" + userList.get(i).getId() + "===" + userList.get(i).getName() + "========"
                     + userList.get(i).getUsername() + "=======" + userList.get(i).getEmail() + "======="
-                    + userList.get(i).getRoles()+ "=======");
+                    + userList.get(i).getRoles()+ "======="+userList.get(i).isStatus());
 
         }
     }
@@ -303,6 +307,9 @@ public class ViewHome {
                 break;
             case "unblocked":
                 System.out.println("You just unblocked user id " + id);
+                break;
+            case "jurisdiction":
+                System.out.println("khong the han block ADMIN VA PM");
         }
     }
 
