@@ -17,7 +17,34 @@ public class ViewProductCategory {
     List<Product> productList = productController.showProductList();
     static List<ProductCategory> productCategoryList = ProductCategoryController.showListProductCategory();
 
+public void formProductCategoryManage(){
+    System.out.println(" =====PRODUCT MANAGE=====");
+    System.out.println("1. Show list product category");
+    System.out.println("2. Create product category");
+    System.out.println("3. Edit product category");
+    System.out.println("4. Delete product category");
+    System.out.println("5. back ViewHome");
+    int choice = Integer.parseInt(Config.scanner().nextLine());
+    switch (choice){
+        case 1:
+            formShowListProductCategory();
+            break;
+        case 2:
+            formCreateProductCategory();
+            break;
+        case 3:
+            formEditProductCategoryById();
+            break;
+        case 4:
+            formDeleteProductCategory();
+            break;
+        case 5:
+            new ViewHome();
+        default:
+            System.out.println("invalid choice ");
+    }
 
+}
     public void formCreateProductCategory(){
         while (true){
             int id;
@@ -34,7 +61,7 @@ public class ViewProductCategory {
             System.out.println("enter random for continue and enter quit for out");
             String backMenu = Config.scanner().nextLine();
             if(backMenu.equalsIgnoreCase("quit")){
-                new ViewHome();
+                formProductCategoryManage();
             }
 
         }
@@ -49,7 +76,7 @@ public class ViewProductCategory {
         System.out.println("input quit for out: ");
         String backMenu = Config.scanner().nextLine();
         if (backMenu.equalsIgnoreCase("quit")) {
-            new ViewHome();
+            formProductCategoryManage();
         }
     }
     public void formDeleteProductCategory(){
@@ -84,7 +111,7 @@ public class ViewProductCategory {
         System.out.println("input quit for out: ");
         String backMenu = Config.scanner().nextLine();
         if(backMenu.equalsIgnoreCase("quit")){
-            new ViewHome();
+            formProductCategoryManage();
         }
     }
     public void formEditProductCategoryById(){
@@ -100,7 +127,7 @@ public class ViewProductCategory {
             System.out.println("Enter random key to continue edit  and Enter quit for out: ");
             String backMenu = Config.scanner().nextLine();
             if (backMenu.equalsIgnoreCase("quit")) {
-                new ViewHome();
+                formProductCategoryManage();
             }
         }
     }

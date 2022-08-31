@@ -2,15 +2,18 @@ package view;
 
 import config.Config;
 import controller.ProductController;
+import controller.ShoppingCartController;
 import controller.UserController;
 import dto.response.ResponseMessenger;
 import model.RoleName;
 import model.Product;
+import model.ShoppingCart;
 import model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static service.product.ProductServiceIMPL.productList;
 import static service.user.UserServiceIMPL.userList;
 
 public class ViewHome {
@@ -19,6 +22,10 @@ public class ViewHome {
 
     User currentUser = userController.getCurrentUser();
     RoleName roleName = new ArrayList<>(currentUser.getRoles()).get(0).getRoleName();
+    ProductController productController = new ProductController();
+
+    List<Product> shoppingCartList = productController.showProductList();
+    ShoppingCartController shoppingCartController = new ShoppingCartController();
 
     public ViewHome() {
         switch (roleName) {
@@ -36,10 +43,13 @@ public class ViewHome {
 
     public void menuUser() {
         System.out.println("Hello USER: " + currentUser.getName());
-        System.out.println("1. show product list");
-        System.out.println("2. show detail product");
-        System.out.println("3. form change password");
-        System.out.println("4. Log out");
+        System.out.println("1. product list");
+        System.out.println("2. detail product");
+        System.out.println("3. sort by price");
+        System.out.println("4. change password");
+        System.out.println("5. My Shopping Cart");
+        System.out.println("6. Order product ");
+        System.out.println("7. Log out");
 
         int choice = Integer.parseInt(Config.scanner().nextLine());
 
@@ -51,73 +61,80 @@ public class ViewHome {
                 new ViewProduct().formDetailProduct();
                 break;
             case 3:
-                formChangePassword();
+                new ViewProduct().sortByPrice();
                 break;
             case 4:
+                formChangePassword();
+                break;
+            case 5:
+                formMyShoppingCart();
+                break;
+            case 6:
+                formOrderProduct();
+            case 7:
                 userController.logout();
                 new ViewMainMenu().menu();
                 return;
         }
         menuUser();
     }
-
+    private void formMyShoppingCart(){
+        System.out.println("MY SHOPPING CART");
+        ShoppingCart shoppingCart = shoppingCartController.getMyShoppingCart();
+        for (int idProduct : shoppingCart.getShoppingCartMap().keySet()){
+            System.out.println("Product name: "+ productController.detailProduct(idProduct).getName()+"\nAmount: " + shoppingCart.getShoppingCartMap().get(idProduct)+"\n");
+        }
+        System.out.println();
+    }
+   private void formOrderProduct(){
+        while (true){
+            System.out.printf("%-5s %-10s %s\n","ID", "NAME","AMOUNT");
+            for(Product product: productList){
+                System.out.printf("%-5s %-10s %s\n", product.getId(),product.getName(),product.getAmount());
+            }
+            System.out.println("enter id to add to cart");
+            int id = Config.scanner().nextInt();
+            if(productController.detailProduct(id).getAmount()!=0){
+                Product product = productController.detailProduct(id);
+                int newAmount = product.getAmount()-1;
+                Product newProduct2 = new Product(newAmount);
+                productController.editProduct1(id,newProduct2);
+                shoppingCartController.createShoppingCart(id);
+                System.out.println("add success");
+            }else{
+                System.out.println("enter random key to continue- enter quit for out");
+                String backMenu = Config.scanner().nextLine();
+                if(backMenu.equalsIgnoreCase("quit")){
+                    new ViewHome();
+                    break;
+                }
+            }
+        }
+}
     public void menuAdmin() {
         System.out.println("Hello ADMIN: " + currentUser.getName());
-        System.out.println("1. Show product list");
-        System.out.println("2. Create product");
-        System.out.println("3. edit product");
-        System.out.println("4. delete product");
-        System.out.println("5. search product");
-        System.out.println("6. detail product");
-        System.out.println("7. show list product category");
-        System.out.println("8. create product category");
-        System.out.println("9. edit product category");
-        System.out.println("10. delete product category");
-        System.out.println("11. form user manage");
-        System.out.println("12. form change password");
-        System.out.println("13. logout");
-
+        System.out.println("1. Product manage ");
+        System.out.println("2. Product Category manage ");
+        System.out.println("3. User manage");
+        System.out.println("4. Change Password");
+        System.out.println("5. Logout");
 
         int choice = Integer.parseInt(Config.scanner().nextLine());
 
         switch (choice) {
             case 1:
-                new ViewProduct().formShowProductList();
+                new ViewProduct().formProductManage();
                 break;
             case 2:
-                new ViewProduct().formCreateProduct();
+                new ViewProductCategory().formProductCategoryManage();
                 break;
             case 3:
-                new ViewProduct().formEditProduct();
-                break;
-            case 4:
-                new ViewProduct().formDeleteProduct();
-                break;
-            case 5:
-                new ViewProduct().findProductById();
-                break;
-            case 6 :
-                new ViewProduct().formDetailProduct();
-                break;
-            case 7:
-                new ViewProductCategory().formShowListProductCategory();
-                break;
-            case 8:
-                new ViewProductCategory().formCreateProductCategory();
-                break;
-            case 9:
-                new ViewProductCategory().formEditProductCategoryById();
-                break;
-            case 10:
-                new ViewProductCategory().formDeleteProductCategory();
-                break;
-            case 11:
                 formUserManage();
                 break;
-            case 12:
+            case 4:
                 formChangePassword();
                 break;
-            case 13:
+            case 5:
                 userController.logout();
                 new ViewMainMenu().menu();
                 return;
@@ -126,93 +143,34 @@ public class ViewHome {
     }
     public void menuPM(){
         System.out.println("Hello PM: " + currentUser.getName());
-        System.out.println("1. Show product list");
-        System.out.println("2. Create product");
-        System.out.println("3. edit product");
-        System.out.println("4. delete product");
-        System.out.println("5. search product");
-        System.out.println("6. detail product");
-        System.out.println("7. show list product category");
-        System.out.println("8. create product category");
-        System.out.println("9. edit product category");
-        System.out.println("10. delete product category");
-        System.out.println("11. logout");
+        System.out.println("1. Product manage ");
+        System.out.println("2. Product Category manage ");
+        System.out.println("3. User manage");
+        System.out.println("4. Change Password");
+        System.out.println("5. logout");
 
         int choice = Integer.parseInt(Config.scanner().nextLine());
 
         switch (choice) {
             case 1:
-                new ViewProduct().formShowProductList();
+                new ViewProduct().formProductManage();
                 break;
             case 2:
-                new ViewProduct().formCreateProduct();
+                new ViewProductCategory().formProductCategoryManage();
                 break;
             case 3:
-                new ViewProduct().formEditProduct();
+                formUserManage();
                 break;
             case 4:
-                new ViewProduct().formDeleteProduct();
+                formChangePassword();
                 break;
             case 5:
-                new ViewProduct().findProductById();
-                break;
-            case 6 :
-                new ViewProduct().formDetailProduct();
-                break;
-            case 7:
-                new ViewProductCategory().formShowListProductCategory();
-                break;
-            case 8:
-                new ViewProductCategory().formCreateProductCategory();
-                break;
-            case 9:
-                new ViewProductCategory().formEditProductCategoryById();
-                break;
-            case 10:
-                new ViewProductCategory().formDeleteProductCategory();
-                break;
-            case 11:
                 userController.logout();
                 new ViewMainMenu().menu();
                 return;
         }
         menuPM();
     }
-    private void formChangePassword() {
-        String oldPassword;
-        while (true) {
-            System.out.println("Enter your old password:");
-            oldPassword = Config.scanner().nextLine();
-            if (oldPassword.matches("[a-zA-Z0-9]{1,10}")) {
-                break;
-            } else {
-                System.out.println("Invalid password, try again!");
-            }
-        }
-
-        System.out.println("Enter your new password: ");
-        String newPassword = Config.scanner().nextLine();
-
-        System.out.println("Repeat the new password: ");
-        String newPassword2 = Config.scanner().nextLine();
-
-        if (!newPassword.equals(newPassword2)) {
-            System.out.println("Repeat password incorrect");
-        } else {
-            ResponseMessenger messenger = userController.changePassword(oldPassword, newPassword);
-            switch (messenger.getMessage()) {
-                case "not match":
-                    System.out.println("Old password does not matches!");
-                    break;
-                case "success":
-                    System.out.println("Change password successfully!");
-                    userController.logout();
-                    new ViewMainMenu().menu();
-            }
-        }
-
-    }
-
 
 
     public void formUserManage() {
@@ -222,7 +180,7 @@ public class ViewHome {
         System.out.println("3. Change role");
         System.out.println("4. Block user");
         System.out.println("5. Change profile");
-        System.out.println("6. Back");
+        System.out.println("6. Back Viewhome");
 
         int choice = Integer.parseInt(Config.scanner().nextLine());
         if (choice == 0) return;
@@ -312,5 +270,40 @@ public class ViewHome {
                 System.out.println("khong the han block ADMIN VA PM");
         }
     }
+    private void formChangePassword() {
+        String oldPassword;
+        while (true) {
+            System.out.println("Enter your old password:");
+            oldPassword = Config.scanner().nextLine();
+            if (oldPassword.matches("[a-zA-Z0-9]{1,10}")) {
+                break;
+            } else {
+                System.out.println("Invalid password, try again!");
+            }
+        }
+
+        System.out.println("Enter your new password: ");
+        String newPassword = Config.scanner().nextLine();
+
+        System.out.println("Repeat the new password: ");
+        String newPassword2 = Config.scanner().nextLine();
+
+        if (!newPassword.equals(newPassword2)) {
+            System.out.println("Repeat password incorrect");
+        } else {
+            ResponseMessenger messenger = userController.changePassword(oldPassword, newPassword);
+            switch (messenger.getMessage()) {
+                case "not match":
+                    System.out.println("Old password does not matches!");
+                    break;
+                case "success":
+                    System.out.println("Change password successfully!");
+                    userController.logout();
+                    new ViewMainMenu().menu();
+            }
+        }
+
+    }
+
 
 }

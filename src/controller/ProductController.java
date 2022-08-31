@@ -40,4 +40,8 @@ public class ProductController {
     }
 
 
+    public void editProduct1(int id, Product newProduct2) {
+        Product product2 = productService.findById(id);
+        product2.setAmount(newProduct2.getAmount());
+    }
 }

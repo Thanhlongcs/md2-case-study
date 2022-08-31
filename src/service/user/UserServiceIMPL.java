@@ -78,10 +78,7 @@ public class UserServiceIMPL implements IUserService {
 
     @Override
     public boolean checkLogin(String username, String password) {
-        System.out.println(username);
-        System.out.println(password);
         for (User user : userList) {
-            System.out.println(user);
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 return true;
             }
@@ -100,20 +97,20 @@ public class UserServiceIMPL implements IUserService {
 //        }
 //        return null;
 //    }
-        User user = new  Config < User > ().readFile(PATH_USER_LOGIN).get(0);
-        if (user==null) return null;
-        return  findByUsername(user.getUsername());
+        List<User> user = new Config<User>().readFile(PATH_USER_LOGIN);
+        if (user == null || user.size() == 0) return null;
+        return findByUsername(user.get(0).getUsername());
     }
+
     @Override
-    public void saveCurrentUser(User user) {
-        new Config<User>().writeFile(PATH_USER_LOGIN, userList);
+    public void saveCurrentUser(List<User> user) {
+        new Config<User>().writeFile(PATH_USER_LOGIN, user);
     }
 
     @Override
     public User findByUsername(String username) {
         for (int i = 0; i < userList.size(); i++) {
-            if (username.equals(userList.get(i).getUsername())) ;
-            {
+            if (username.equals(userList.get(i).getUsername())) {
                 return userList.get(i);
             }
         }
@@ -143,12 +140,12 @@ public class UserServiceIMPL implements IUserService {
 
     @Override
     public void changeProfile(User user) {
-       User user1 = findByUsername(user.getUsername());
-       user1.setName(user.getName());
-       user1.setUsername(user.getUsername());
-       user1.setEmail(user.getEmail());
-       user1.setPassword(user.getPassword());
-        new Config<User>().writeFile(PATH_USER, userList);
+        User user1 = findByUsername(user.getUsername());
+        user1.setName(user.getName());
+        user1.setUsername(user.getUsername());
+        user1.setEmail(user.getEmail());
+        user1.setPassword(user.getPassword());
+        new Config<User>().writeFile(PATH_USER_LOGIN, userList);
     }
 
 

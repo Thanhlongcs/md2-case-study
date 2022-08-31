@@ -45,7 +45,7 @@ public class ViewChangeProfile {
                 System.out.println("invalid email, try again");
             }
         }
-        User user1 = new User(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword(), user.getRoles());
+        User user1 = new User(user.getId(), user.getName(), user.getUsername(), email, user.getPassword(), user.getRoles());
         if (userController.existByEmail(email)) {
             System.out.println("email existed");
         } else {
@@ -67,7 +67,8 @@ public class ViewChangeProfile {
                 System.out.println("change name failed, try again");
             }
         }
-        User user1 = new User(user.getId(),user.getName(), user.getUsername(), user.getEmail(), user.getPassword(), user.getRoles());
+        User user1 = new User(user.getId(),name, user.getUsername(), user.getEmail(), user.getPassword(), user.getRoles());
+        System.out.println(user1);
         userController.updateProfile(user1);
         System.out.println("change name success");
         System.out.println(userController.getUserList());

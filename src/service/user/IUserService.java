@@ -4,6 +4,8 @@ import model.Role;
 import model.User;
 import service.IGenericService;
 
+import java.util.List;
+
 public interface IUserService extends IGenericService<User> {
     boolean existsByUsername(String username);
 
@@ -13,7 +15,7 @@ public interface IUserService extends IGenericService<User> {
 
     User getCurrentUser();
 
-    void saveCurrentUser(User user);
+    void saveCurrentUser(List<User> user);
 
     User findByUsername(String username);
 

@@ -33,6 +33,6 @@ public class ProductCategory implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductCategory: " + name;
+        return  name;
     }
 }

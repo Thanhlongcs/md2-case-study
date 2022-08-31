@@ -81,8 +81,9 @@ public class UserController {
         }
 
         User userLogin = userService.findByUsername(signInDTO.getUsername());
-
-        userService.saveCurrentUser(userLogin);
+        List<User> users = new ArrayList<>();
+        users.add(userLogin);
+        userService.saveCurrentUser(users);
 
         return new ResponseMessenger("login success");
     }

@@ -63,6 +63,7 @@ public class ProductServiceIMPL implements IProductService {
                 productList.get(i).setPrice(product.getPrice());
                 productList.get(i).setDescription(product.getDescription());
                 productList.get(i).setProductCategory(product.getProductCategory());
+                productList.get(i).setAmount(product.getAmount());
             }
         }
         new Config<Product>().writeFile(PATH_PRODUCT,productList);
